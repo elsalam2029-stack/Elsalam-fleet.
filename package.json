@@ -1,0 +1,23 @@
+{
+  "name": "elsalam-fleet-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Backend starter for Al Salam Fleet Management",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "check": "node --check src/server.js && node --check src/db.js && node --check src/auth.js"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "argon2": "^0.41.1",
+    "connect-pg-simple": "^10.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "express-session": "^1.18.1",
+    "helmet": "^8.1.0",
+    "pg": "^8.16.3"
+  }
+}
