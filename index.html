@@ -1,1 +1,178 @@
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Al Salam Fleet | إدارة الأسطول</title>
+<style>
+:root{--navy:#142b4a;--gold:#d5a642;--bg:#f3f5f9;--white:#fff;--muted:#718096}
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,Arial,sans-serif;background:var(--bg);color:#263449}
+header{background:var(--navy);color:white;padding:22px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:24px}
+header p{margin:7px 0 0;color:#d9e2ef;font-size:13px}
+.logo{color:var(--gold);font-weight:bold;font-size:14px}
+.layout{display:flex;min-height:calc(100vh - 90px)}
+nav{width:220px;background:#fff;padding:18px 12px;border-left:1px solid #e4e8ef}
+nav button{display:block;width:100%;border:0;background:white;text-align:right;padding:13px;border-radius:8px;margin-bottom:5px;cursor:pointer;font:inherit;color:#34445b}
+nav button.active,nav button:hover{background:#edf1f8;color:var(--navy);font-weight:bold;border-right:4px solid var(--gold)}
+main{flex:1;padding:25px;min-width:0}
+h2{margin:0 0 20px;color:var(--navy)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:14px;margin-bottom:22px}
+.stat,.panel{background:white;border:1px solid #e7ebf2;border-radius:12px;padding:18px}
+.stat span{color:var(--muted);font-size:13px}
+.stat strong{display:block;font-size:27px;color:var(--navy);margin-top:12px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+input,select{font:inherit;padding:11px;border:1px solid #dce2eb;border-radius:7px;background:white;min-width:0}
+.toolbar input{flex:1;min-width:180px}
+.btn{border:0;border-radius:7px;padding:11px 16px;cursor:pointer;font:inherit}
+.primary{background:var(--navy);color:white}
+.gold{background:var(--gold);color:#19283b}
+.danger{background:#fae8e8;color:#a32727;padding:7px 10px}
+.table-wrap{overflow-x:auto;background:white;border-radius:10px;border:1px solid #e7ebf2}
+table{width:100%;border-collapse:collapse;min-width:600px}
+th,td{padding:13px 12px;text-align:right;border-bottom:1px solid #edf0f4;font-size:13px}
+th{background:#f7f8fb;color:var(--navy)}
+.empty{text-align:center;padding:28px;color:var(--muted)}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:15px}
+.form-grid input,.form-grid select{width:100%}
+.hidden{display:none!important}
+.notice{font-size:12px;color:var(--muted);line-height:1.8;margin-top:16px}
+footer{text-align:center;padding:18px;color:var(--muted);font-size:12px}
+@media(max-width:700px){.layout{display:block}nav{width:100%;display:flex;overflow-x:auto;border-left:0;border-bottom:1px solid #ddd;gap:5px}nav button{white-space:nowrap;width:auto;min-width:max-content;margin:0}main{padding:15px}header h1{font-size:20px}}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>السلام لإدارة الأسطول</h1>
+    <p>نظام إدارة السيارات والرحلات والحسابات</p>
+  </div>
+  <div class="logo">AL SALAM FLEET</div>
+</header>
+<div class="layout">
+<nav id="nav">
+  <button class="active" data-page="dashboard">🏠 الرئيسية</button>
+  <button data-page="cars">🚘 السيارات</button>
+  <button data-page="drivers">👨‍✈️ السائقون</button>
+  <button data-page="clients">👥 العملاء</button>
+  <button data-page="trips">🛣️ الرحلات</button>
+  <button data-page="payments">💰 المدفوعات</button>
+  <button data-page="reports">📊 التقارير</button>
+</nav>
+<main>
+<section id="dashboard">
+<h2>لوحة التحكم</h2>
+<div class="stats">
+ <div class="stat"><span>إجمالي السيارات</span><strong id="sCars">0</strong></div>
+ <div class="stat"><span>إجمالي السائقين</span><strong id="sDrivers">0</strong></div>
+ <div class="stat"><span>إجمالي العملاء</span><strong id="sClients">0</strong></div>
+ <div class="stat"><span>عدد الرحلات</span><strong id="sTrips">0</strong></div>
+ <div class="stat"><span>إجمالي قيمة الرحلات</span><strong id="sRevenue">0</strong></div>
+ <div class="stat"><span>المبالغ المتبقية</span><strong id="sDue">0</strong></div>
+</div>
+<div class="panel">
+<h3>مرحباً بك في نظام السلام</h3>
+<p>استخدم القائمة لإضافة بيانات السيارات والسائقين والعملاء وتسجيل الرحلات والمدفوعات.</p>
+<p class="notice">تنبيه: هذه نسخة تجريبية تحفظ البيانات في المتصفح الحالي فقط. لا توجد قاعدة بيانات مشتركة أو نسخ احتياطي تلقائي.</p>
+</div>
+</section>
+<section id="workspace" class="hidden">
+<h2 id="pageTitle"></h2>
+<div id="entry" class="panel" style="margin-bottom:18px">
+ <form id="recordForm">
+  <div id="fields" class="form-grid"></div>
+  <button class="btn primary" type="submit">حفظ البيانات</button>
+  <button class="btn" type="button" id="cancelEdit">إلغاء</button>
+ </form>
+</div>
+<div class="toolbar">
+ <input id="search" placeholder="بحث في البيانات...">
+ <button class="btn gold" id="export">تصدير CSV</button>
+</div>
+<div class="table-wrap"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+</section>
+<section id="reports" class="hidden">
+<h2>التقارير المالية</h2>
+<div class="stats">
+ <div class="stat"><span>إجمالي الرحلات</span><strong id="rRevenue">0</strong></div>
+ <div class="stat"><span>إجمالي المدفوع</span><strong id="rPaid">0</strong></div>
+ <div class="stat"><span>إجمالي المتبقي</span><strong id="rDue">0</strong></div>
+</div>
+<div class="panel">
+<h3>ملخص الحسابات</h3>
+<p>تُحسب الأرقام من الرحلات المسجلة في هذا المتصفح.</p>
+<button class="btn primary" onclick="showPage('trips')">عرض الرحلات</button>
+<button class="btn gold" onclick="showPage('payments')">تسجيل مدفوعات</button>
+</div>
+</section>
+</main>
+</div>
+<footer>Al Salam Fleet © 2026</footer>
+<script>
+const configs={
+ cars:{title:"إدارة السيارات",fields:[["number","رقم السيارة","text"],["model","الماركة / الموديل","text"],["year","سنة الصنع","number"],["status","الحالة","select",["متاحة","في رحلة","صيانة"]]],cols:[["number","رقم السيارة"],["model","الماركة / الموديل"],["year","سنة الصنع"],["status","الحالة"]]},
+ drivers:{title:"إدارة السائقين",fields:[["name","اسم السائق","text"],["phone","رقم الهاتف","tel"],["license","رقم الرخصة","text"],["status","الحالة","select",["نشط","غير نشط"]]],cols:[["name","اسم السائق"],["phone","الهاتف"],["license","رقم الرخصة"],["status","الحالة"]]},
+ clients:{title:"إدارة العملاء",fields:[["name","اسم العميل","text"],["phone","رقم الهاتف","tel"],["address","العنوان","text"],["notes","ملاحظات","text"]],cols:[["name","اسم العميل"],["phone","الهاتف"],["address","العنوان"],["notes","ملاحظات"]]},
+ trips:{title:"إدارة الرحلات",fields:[["date","تاريخ الرحلة","date"],["car","رقم السيارة","text"],["driver","اسم السائق","text"],["client","اسم العميل","text"],["origin","مكان التحميل","text"],["destination","وجهة الرحلة","text"],["km","المسافة بالكيلومتر","number"],["price","قيمة الرحلة بالجنيه","number"],["paid","المبلغ المدفوع بالجنيه","number"],["status","حالة الرحلة","select",["غير مدفوعة","مدفوعة جزئياً","مدفوعة"]],["notes","ملاحظات","text"]],cols:[["date","التاريخ"],["car","السيارة"],["driver","السائق"],["client","العميل"],["origin","من"],["destination","إلى"],["km","كم"],["price","القيمة"],["paid","المدفوع"],["due","المتبقي"],["status","الحالة"]]},
+ payments:{title:"تسجيل المدفوعات",fields:[["date","تاريخ الدفع","date"],["client","اسم العميل","text"],["trip","رقم الرحلة / وصفها","text"],["amount","المبلغ بالجنيه","number"],["method","طريقة الدفع","select",["نقدي","تحويل بنكي","محفظة إلكترونية"]],["notes","ملاحظات","text"]],cols:[["date","التاريخ"],["client","العميل"],["trip","الرحلة"],["amount","المبلغ"],["method","طريقة الدفع"],["notes","ملاحظات"]]}
+};
+let data={cars:[],drivers:[],clients:[],trips:[],payments:[]};
+try{const saved=localStorage.getItem("alsalamFleetData");if(saved)data={...data,...JSON.parse(saved)}}catch(e){}
+let page="dashboard",editing=null;
+const el=id=>document.getElementById(id);
+function save(){try{localStorage.setItem("alsalamFleetData",JSON.stringify(data))}catch(e){alert("تعذر حفظ البيانات في المتصفح.")}refreshStats()}
+function money(n){return (Number(n)||0).toLocaleString("ar-EG",{maximumFractionDigits:2})+" ج.م"}
+function refreshStats(){
+ el("sCars").textContent=data.cars.length;
+ el("sDrivers").textContent=data.drivers.length;
+ el("sClients").textContent=data.clients.length;
+ el("sTrips").textContent=data.trips.length;
+ const total=data.trips.reduce((s,r)=>s+(+r.price||0),0);
+ const paid=data.trips.reduce((s,r)=>s+(+r.paid||0),0);
+ el("sRevenue").textContent=money(total);el("sDue").textContent=money(total-paid);
+ el("rRevenue").textContent=money(total);el("rPaid").textContent=money(paid);el("rDue").textContent=money(total-paid);
+}
+function showPage(p){
+ page=p;editing=null;
+ document.querySelectorAll("main>section").forEach(s=>s.classList.add("hidden"));
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===p));
+ if(p==="dashboard"||p==="reports")el(p).classList.remove("hidden");
+ else{el("workspace").classList.remove("hidden");renderWorkspace()}
+ refreshStats()
+}
+function renderWorkspace(){
+ const c=configs[page];el("pageTitle").textContent=c.title;
+ el("fields").innerHTML=c.fields.map(f=>`<div><label>${f[1]}</label>${f[2]==="select"?`<select name="${f[0]}">${f[3].map(x=>`<option>${x}</option>`).join("")}</select>`:`<input name="${f[0]}" type="${f[2]}" ${f[2]==="number"?'min="0" step="any"':''} ${["number","text","date","tel"].includes(f[2])?"":""} placeholder="${f[1]}" ${f[0]==="date"?"":""} ${["number","date"].includes(f[2])?"":"required"}>`}</div>`).join("");
+ el("thead").innerHTML="<tr>"+c.cols.map(x=>`<th>${x[1]}</th>`).join("")+"<th>إجراءات</th></tr>";
+ el("search").value="";el("recordForm").reset();el("cancelEdit").classList.add("hidden");editing=null;renderRows()
+}
+function renderRows(){
+ const c=configs[page],q=el("search").value.trim().toLowerCase();
+ const rows=data[page].map((r,i)=>({...r,_i:i})).filter(r=>Object.values(r).some(v=>String(v??"").toLowerCase().includes(q)));
+ el("tbody").innerHTML=rows.length?rows.map(r=>"<tr>"+c.cols.map(([k])=>`<td>${esc(k==="due"?money((+r.price||0)-(+r.paid||0)):k==="price"||k==="paid"||k==="amount"?money(r[k]):r[k]??"—")}</td>`).join("")+`<td><button class="btn" onclick="editRow(${r._i})">تعديل</button> <button class="btn danger" onclick="deleteRow(${r._i})">حذف</button></td></tr>`).join(""):`<tr><td class="empty" colspan="${c.cols.length+1}">لا توجد بيانات مسجلة</td></tr>`
+}
+function esc(v){return String(v).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]))}
+el("recordForm").addEventListener("submit",e=>{
+ e.preventDefault();const obj=Object.fromEntries(new FormData(e.target).entries());
+ if(page==="trips"&&(+obj.paid||0)>(+obj.price||0)){alert("المبلغ المدفوع لا يمكن أن يتجاوز قيمة الرحلة.");return}
+ if(page==="trips")obj.paid=obj.paid||0;
+ if(editing===null)data[page].push(obj);else data[page][editing]=obj;
+ save();renderWorkspace();alert("تم حفظ البيانات")
+});
+function editRow(i){editing=i;const r=data[page][i];for(const [k,v] of Object.entries(r)){const input=el("recordForm").elements.namedItem(k);if(input)input.value=v}
+ el("cancelEdit").classList.remove("hidden");window.scrollTo({top:0,behavior:"smooth"})}
+function deleteRow(i){if(confirm("هل تريد حذف هذا السجل؟")){data[page].splice(i,1);save();renderRows()}}
+el("cancelEdit").addEventListener("click",()=>{editing=null;el("recordForm").reset();el("cancelEdit").classList.add("hidden")});
+el("search").addEventListener("input",renderRows);
+el("nav").addEventListener("click",e=>{const b=e.target.closest("button[data-page]");if(b)showPage(b.dataset.page)});
+el("export").addEventListener("click",()=>{
+ const c=configs[page];const csv=[c.cols.map(x=>x[1]).join(","),...data[page].map(r=>c.cols.map(([k])=>`"${String(k==="due"?(+r.price||0)-(+r.paid||0):r[k]??"").replace(/"/g,'""')}"`).join(","))].join("\r\n");
+ const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"}),url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download=page+".csv";a.click();URL.revokeObjectURL(url)
+});
+refreshStats();
+</script>
+</body>
+</html>
