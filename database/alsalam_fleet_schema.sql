@@ -1,3 +1,4 @@
+COUNT(DISTINCT t.vehicle_id) AS vehicle_count,
          ARRAY_AGG(DISTINCT v.plate_number ORDER BY v.plate_number) AS plates,
          SUM(t.overtime_hours) AS approved_overtime_hours,
          SUM(t.deviations_hours) AS deviations_hours
@@ -98,5 +99,22 @@ WHERE NOT EXISTS (SELECT 1 FROM overtime_rules);
 INSERT INTO fuel_prices(fuel_type, effective_from, price_per_liter, notes)
 VALUES ('جاز', DATE '2026-09-01', 10, 'سعر أولي وارد في النموذج التجريبي')
 ON CONFLICT (fuel_type, effective_from) DO NOTHING;
+
+
+-- Secure default: clients cannot directly read/write these tables until explicit policies
+-- or a server-side API with authorization checks is configured. Service-role server code bypasses RLS.
+ALTER TABLE roles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE permissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE role_permissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE app_users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE vehicles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE drivers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE locations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE overtime_rules ENABLE ROW LEVEL SECURITY;
+ALTER TABLE trip_sheets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fuel_prices ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fuel_entries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE audit_log ENABLE ROW LEVEL SECURITY;
+ALTER TABLE backup_runs ENABLE ROW LEVEL SECURITY;
 
 COMMIT;
